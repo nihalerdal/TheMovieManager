@@ -51,15 +51,21 @@ class TMDBClient {
         
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data else {
-                completion(nil, error)
+                DispatchQueue.main.async {
+                    completion(nil, error)
+                }
                 return
             }
             let decoder = JSONDecoder()
             do {
                 let responseObject = try decoder.decode(ResponseType.self, from: data)
-                completion(responseObject, nil)
+                DispatchQueue.main.async {
+                    completion(responseObject, nil)
+                }
             } catch {
-                completion([] as? ResponseType, error)
+                DispatchQueue.main.async {
+                    completion([] as? ResponseType, error)
+                }
             }
         }
         task.resume()
@@ -82,7 +88,9 @@ class TMDBClient {
             
             do {
                 let responseObject = try JSONDecoder().decode(ResponseType.self, from: data)
-                completion(responseObject, nil)
+                DispatchQueue.main.async {
+                    completion(responseObject, nil)
+                }
             } catch {
                 completion(nil, error)
             }

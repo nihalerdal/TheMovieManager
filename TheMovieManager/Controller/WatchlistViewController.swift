@@ -19,9 +19,9 @@ class WatchlistViewController: UIViewController {
         
         TMDBClient.getWatchlist() { movies, error in
             MovieModel.watchlist = movies
-            DispatchQueue.main.async {
+         
                 self.tableView.reloadData()
-            }
+            
         }
     }
     

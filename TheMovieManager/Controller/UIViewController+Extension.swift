@@ -14,7 +14,7 @@ extension UIViewController {
         
         TMDBClient.logout {
             DispatchQueue.main.async {
-                dismiss(animated: true, completion: nil)
+                self.dismiss(animated: true, completion: nil)
             }
         }
     }

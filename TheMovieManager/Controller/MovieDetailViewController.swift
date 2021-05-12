@@ -53,7 +53,21 @@ class MovieDetailViewController: UIViewController {
     }
     
     @IBAction func favoriteButtonTapped(_ sender: UIBarButtonItem) {
+        TMDBClient.markFavorite(media_id: movie.id, favorite: !isFavorite, completion: handleFavoritesResponse(success:error:))
 
+    }
+    
+    func handleFavoritesResponse(success: Bool, error: Error?) {
+        if success{
+            if isFavorite{
+                MovieModel.favorites.filter()
+                {$0 != self.movie}
+            }else {
+                MovieModel.favorites.append(movie)
+            }
+            
+            toggleBarButton(favoriteBarButtonItem, enabled: isFavorite)
+        }
     }
     
     func toggleBarButton(_ button: UIBarButtonItem, enabled: Bool) {

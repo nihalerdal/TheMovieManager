@@ -33,6 +33,7 @@ class TMDBClient {
         case search(String)
         case markWatchlist
         case markFavorites
+        case posterImageURL(String)
         
         var stringValue: String {
             switch self {
@@ -46,6 +47,7 @@ class TMDBClient {
             case .search(let query): return Endpoints.base + "/search/movie" + Endpoints.apiKeyParam + "&query=\(query.addingPercentEncoding(withAllowedCharacters:.urlQueryAllowed) ?? "")"
             case .markWatchlist: return Endpoints.base + "/account/\(Auth.accountId)/watchlist" + Endpoints.apiKeyParam + "&session_id=\(Auth.sessionId)"
             case .markFavorites: return Endpoints.base + "/account/\(Auth.accountId)/favorite" + Endpoints.apiKeyParam + "&session_id=\(Auth.sessionId)"
+            case .posterImageURL(let posterPath): return "https://image.tmdb.org/t/p/500" + posterPath
             }
         }
         
@@ -220,5 +222,15 @@ class TMDBClient {
             }
         }
         
+    }
+    
+    class func downloadPosterImage(posterPath: String, completion: @escaping (Data?, Error?) -> Void){
+        let task = URLSession.shared.dataTask(with: Endpoints.posterImageURL(posterPath).url) { data, response, error in
+            
+            DispatchQueue.main.async {
+                completion(data, error)
+            }
+        }
+        task.resume()
     }
 }

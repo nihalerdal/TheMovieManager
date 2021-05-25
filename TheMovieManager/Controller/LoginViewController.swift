@@ -14,6 +14,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var loginViaWebsiteButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -24,11 +25,13 @@ class LoginViewController: UIViewController {
     
     @IBAction func loginTapped(_ sender: UIButton) {
         performSegue(withIdentifier: "completeLogin", sender: nil)
+        setLogginIn(true)
         TMDBClient.getRequestToken(completion: handleRequestTokenResponse(success:error:))
         
     }
     
     @IBAction func loginViaWebsiteTapped() {
+        setLogginIn(true)
         TMDBClient.getRequestToken { success, error in
             if success {
               
@@ -59,6 +62,8 @@ class LoginViewController: UIViewController {
     }
     
     func handleSessionResponse(success: Bool, error: Error?){ //burdan sonra da handleLoginResponse icinde cagiriyorum. cunku login dogru calistiktan sonra sessionid yaratilmasini bekliyorum.
+        
+        setLogginIn(false)
         if success{
             print(TMDBClient.Auth.sessionId)
             
@@ -67,4 +72,15 @@ class LoginViewController: UIViewController {
         }
     }
     
+    func setLogginIn(_ loggingIn: Bool){
+        if loggingIn {
+            DispatchQueue.main.async {
+                self.activityIndicator.startAnimating()
+            }
+        }else{
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+            }
+        }
+    }
 }

@@ -48,6 +48,8 @@ class LoginViewController: UIViewController {
                 TMDBClient.login(username: self.emailTextField.text ?? "", password: self.passwordTextField.text ?? "", completion: self.handleLoginResponse(success:error:))
             
          
+        }else{
+            showLoginFailure(message: error?.localizedDescription ?? "")
         }
     }
     
@@ -58,6 +60,8 @@ class LoginViewController: UIViewController {
             print(TMDBClient.Auth.requestToken)
             TMDBClient.createSessionId( completion: handleSessionResponse(success:error:))
             
+        }else{
+            showLoginFailure(message: error?.localizedDescription ?? "")
         }
     }
     
@@ -69,6 +73,8 @@ class LoginViewController: UIViewController {
             
                 self.performSegue(withIdentifier: "completeLogin", sender: nil)
         
+        }else{
+            showLoginFailure(message: error?.localizedDescription ?? "")
         }
     }
     
@@ -86,5 +92,11 @@ class LoginViewController: UIViewController {
         passwordTextField.isEnabled = !loggingIn
         loginButton.isEnabled = !loggingIn
         loginViaWebsiteButton.isEnabled = !loggingIn
+    }
+    
+    func showLoginFailure(message: String){
+        let alertVC = UIAlertController(title: "Login Failed", message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        show(alertVC, sender: nil)
     }
 }

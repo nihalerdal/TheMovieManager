@@ -13,7 +13,7 @@ class TMDBClient {
     static let apiKey = "9a0172612787dcab182b25a36a1b5d9a"
     
     
-    struct Auth {
+    private struct Auth {
         static var accountId = 0
         static var requestToken = ""
         static var sessionId = ""
